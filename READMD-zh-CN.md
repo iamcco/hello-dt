@@ -13,7 +13,7 @@ sudo npm install -g hello-dt
 sudo hello-dt -i
 ```
 
-- 打开 Hello-DT 应用扫描安装中出现的二维码
+- 打开 [Hello-DT](https://github.com/iamcco/hello-dt/releases/tag/v1.0-app) 应用扫描安装中出现的二维码
 
 - 开启服务
 

@@ -15,7 +15,7 @@ sudo npm install -g hello-dt
 sudo hello-dt -i
 ```
 
-Open hello-dt app and scan QrCode
+Open [Hello-DT](https://github.com/iamcco/hello-dt/releases/tag/v1.0-app) app and scan QrCode
 
 - enable and start server
 
