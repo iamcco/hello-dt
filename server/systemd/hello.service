@@ -1,0 +1,14 @@
+[Unit]
+Description=hello service
+After=multi-user.target
+
+[Service]
+Type=simple
+StandardOutput=file:/tmp/hello.log
+StandardError=file:/tmp/hello.err.log
+ExecStart=/home/cpi/.bin/hello
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

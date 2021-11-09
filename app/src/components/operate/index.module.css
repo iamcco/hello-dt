@@ -1,0 +1,33 @@
+.operate {
+  width: 100%;
+  padding: 30px 20px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.label {
+  min-width: 60px;
+}
+
+.value {
+  flex: 1;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  height: 32px;
+  color: white;
+  background: #3386ff;
+  border-radius: 2px;
+  border: 0;
+}
+
+.text-center {
+  align-items: center;
+}

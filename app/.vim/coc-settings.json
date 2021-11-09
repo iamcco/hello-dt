@@ -1,0 +1,14 @@
+{
+  "coc.preferences.formatOnSaveFiletypes": [
+    "typescript",
+    "typescriptreact"
+  ],
+  "cSpell.words": [
+    "Vditor",
+    "devterm",
+    "diningcity",
+    "qrcanvas",
+    "subp",
+    "zeroconf"
+  ]
+}

@@ -1,0 +1,11 @@
+.eslintrc.js
+.prettierrc.js
+.editorconfig
+.gitignore
+.vim/
+.husky/
+esbuild.js
+tsconfig.json
+yarn.lock
+src/
+systemd/
