@@ -1,10 +1,10 @@
 # Hello-DT
 
-> Hello DevTerm
+> With Hello-DT app you can edit todo list or others on mobile then print using DevTerm.
 
 ![IMG_20211109_190438](https://user-images.githubusercontent.com/5492542/140915643-08dd8bc2-0052-4ebb-9d3e-8b575dbd7970.jpeg)
 
-English | [简体中文](./READMD-zh-CN.md)
+English | [简体中文](./README-zh-CN.md)
 
 ## Installation
 
@@ -15,7 +15,7 @@ sudo npm install -g hello-dt
 sudo hello-dt -i
 ```
 
-Open [Hello-DT](https://github.com/iamcco/hello-dt/releases/tag/v1.0-app) app and scan QrCode
+Open [Hello-DT](https://github.com/iamcco/hello-dt/releases) app and scan QrCode
 
 - enable and start server
 
