@@ -5,3 +5,38 @@
 .vditor-reset {
   font-size: 28px;
 }
+
+.vditor-task {
+  position: relative;
+}
+
+.vditor-task input[type=checkbox] {
+  width: 0;
+  height: 0;
+}
+
+.vditor-task input[type=checkbox]:checked::before {
+  margin-top: 1px;
+  display: block;
+  content: "✔";
+  position: absolute;
+  top: 50%;
+  left: -38px;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #24292e;
+}
+
+.vditor-task input[type=checkbox]::after {
+  margin-top: 1px;
+  display: block;
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid #24292e;
+  position: absolute;
+  top: 50%;
+  left: -40px;
+  transform: translateY(-50%);
+}
