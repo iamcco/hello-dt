@@ -43,8 +43,17 @@ const App: Component = () => {
                   return;
                 }
                 setTimeout(() => {
-                  html2canvas(document.querySelector(".vditor-reset")!)
+                  const ctn = document.querySelector(
+                    ".vditor-wysiwyg"
+                  )! as HTMLDivElement;
+                  const box = document.querySelector(
+                    ".vditor-reset"
+                  )! as HTMLDivElement;
+                  ctn.style.height = `${box.scrollHeight}px`;
+
+                  html2canvas(box)
                     .then((canvas) => {
+                      ctn.style.height = "unset";
                       const form = new FormData();
                       form.set(
                         "size",
