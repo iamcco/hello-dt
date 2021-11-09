@@ -1,4 +1,4 @@
 node_modules
 dist
-android/app/
+android/app/release/
 .DS_Store
