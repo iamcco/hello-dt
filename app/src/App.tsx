@@ -51,9 +51,32 @@ const App: Component = () => {
                   )! as HTMLDivElement;
                   ctn.style.height = `${box.scrollHeight}px`;
 
+                  // check list
+                  document.querySelectorAll(".vditor-task").forEach((item) => {
+                    const input = item.querySelector("input")!;
+                    item.classList.add("print");
+                    const check = document.createElement("div");
+                    check.classList.add("checkbox-check");
+                    if (input.checked) {
+                      check.innerHTML = "✓";
+                    }
+                    const box = document.createElement("div");
+                    box.classList.add("checkbox-box");
+                    item.appendChild(check);
+                    item.appendChild(box);
+                  });
+
                   html2canvas(box)
                     .then((canvas) => {
                       ctn.style.height = "unset";
+                      document
+                        .querySelectorAll(".vditor-task")
+                        .forEach((item) => {
+                          item.classList.remove("print");
+                          item.querySelectorAll("div").forEach((div) => {
+                            item.removeChild(div);
+                          });
+                        });
                       const form = new FormData();
                       form.set(
                         "size",
