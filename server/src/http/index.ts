@@ -14,11 +14,11 @@ export async function startHttp(): Promise<number> {
     server.listen(0, '0.0.0.0', () => {
       const address = server.address();
 
-      const port = typeof address === 'string' ? address.split(':')[1] : address?.port;
+      const port = typeof address === 'string' ? parseFloat(address.split(':')[1]) : address!.port;
 
       console.log(`Running at: ${port}`);
 
-      resolve(parseFloat(port as any));
+      resolve(port);
     });
   });
 }

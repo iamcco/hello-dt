@@ -20,7 +20,9 @@ function checkIfInLocalNetwork() {
 
 export async function startMdns(port: number) {
   if (!checkIfInLocalNetwork()) {
-    return setTimeout(startMdns, 10000);
+    return setTimeout(() => {
+      startMdns(port);
+    }, 10000);
   }
   console.log('Start publish DevTerm');
   const instance = new Bonjour();
