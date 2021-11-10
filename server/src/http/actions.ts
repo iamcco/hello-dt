@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { createWriteStream, readFileSync, renameSync, unlinkSync } from 'fs';
+import { createWriteStream, readFileSync, renameSync } from 'fs';
 import { IncomingMessage, ServerResponse } from 'http';
 import multiparty from 'multiparty';
 
@@ -131,7 +131,6 @@ use((_req, res, next) => (params) => {
     exec(
       `lp -d devterm_printer -o media=Custom.${params.fields.size[0]}mm -o scaling=100 -o print-quality=5 ${target}`,
     );
-    unlinkSync(target);
     return res.end();
   }
   next(params);
