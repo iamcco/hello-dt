@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { createWriteStream, existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { createWriteStream, readFileSync, renameSync, unlinkSync } from 'fs';
 import { IncomingMessage, ServerResponse } from 'http';
 import multiparty from 'multiparty';
 
@@ -124,14 +124,14 @@ use((_req, res, next) => (params) => {
 });
 
 use((_req, res, next) => (params) => {
-  if (params?.action === 'print' && params?.fields?.target[0] !== undefined && params?.fields?.size[0] !== undefined) {
-    if (!existsSync('/tmp/prints/')) {
-      mkdirSync('/tmp/prints/');
-    }
-    writeFileSync('/tmp/prints/target.png', Buffer.from(params.fields.target[0], 'base64'));
+  const targets = params?.files?.target || [];
+  if (params?.action === 'print' && targets[0] !== undefined && params?.fields?.size[0] !== undefined) {
+    const target = `${targets[0].path}.png`;
+    renameSync(targets[0].path, target);
     exec(
-      `lp -d devterm_printer -o media=Custom.${params.fields.size[0]}mm -o scaling=100 -o print-quality=5 /tmp/prints/target.png`,
+      `lp -d devterm_printer -o media=Custom.${params.fields.size[0]}mm -o scaling=100 -o print-quality=5 ${target}`,
     );
+    unlinkSync(target);
     return res.end();
   }
   next(params);
