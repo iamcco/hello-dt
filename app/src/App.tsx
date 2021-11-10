@@ -3,7 +3,7 @@ import html2canvas from "html2canvas";
 import { Zeroconf } from "@ionic-native/zeroconf";
 
 import styles from "./App.module.css";
-import { toBlackWhiteBase64 } from "./utils";
+import { imageFilter } from "./utils";
 import { Editor } from "./components/editor";
 import { Subscription } from "rxjs";
 import { Operate } from "./components/operate";
@@ -58,7 +58,7 @@ const App: Component = () => {
                     const check = document.createElement("div");
                     check.classList.add("checkbox-check");
                     if (input.checked) {
-                      check.innerHTML = "✓";
+                      check.innerHTML = "✔️";
                     }
                     const box = document.createElement("div");
                     box.classList.add("checkbox-box");
@@ -77,23 +77,29 @@ const App: Component = () => {
                             item.removeChild(div);
                           });
                         });
-                      const form = new FormData();
-                      form.set(
-                        "size",
-                        `${58}x${Math.ceil(
-                          canvas.height / (canvas.width / 58)
-                        )}`
-                      );
-                      form.set("target", toBlackWhiteBase64(canvas));
-                      fetch(`http://${state.remoteIp}:${state.port}/print`, {
-                        method: "POST",
-                        body: form,
-                        headers: {
-                          authorization: `Bearer ${state.secret}`,
-                        },
-                      }).catch((err) => {
-                        alert(`fetch print service: ${err}`);
-                      });
+                      imageFilter(canvas);
+                      canvas.toBlob((blob) => {
+                        if (!blob) {
+                          return;
+                        }
+                        const form = new FormData();
+                        form.set(
+                          "size",
+                          `${58}x${Math.ceil(
+                            canvas.height / (canvas.width / 58)
+                          )}`
+                        );
+                        form.set("target", blob);
+                        fetch(`http://${state.remoteIp}:${state.port}/print`, {
+                          method: "POST",
+                          body: form,
+                          headers: {
+                            authorization: `Bearer ${state.secret}`,
+                          },
+                        }).catch((err) => {
+                          alert(`fetch print service: ${err}`);
+                        });
+                      }, "image/png");
                     })
                     .catch((err) => {
                       alert(`html2canvas error: ${err}`);
