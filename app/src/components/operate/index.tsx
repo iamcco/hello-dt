@@ -10,7 +10,7 @@ export function Operate() {
     if (!state.remoteIp) {
       return;
     }
-    fetch(`http://${state.remoteIp}:${state.port}/getBrightness`, {
+    fetch(`http://${state.remoteIp}:${state.port}/brightness`, {
       headers: {
         authorization: `Bearer ${state.secret}`,
       },
