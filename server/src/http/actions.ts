@@ -63,10 +63,8 @@ use((req, res, next) => (params) => {
     return res.end();
   }
 
-  const formParser = new multiparty.Form({
-    maxFieldsSize: 20971520,
-  });
   if (req.headers['content-type'] !== undefined) {
+    const formParser = new multiparty.Form();
     formParser.parse(req, (err, fields, files) => {
       if (err) {
         console.error(err);
@@ -90,16 +88,22 @@ use((req, res, next) => (params) => {
 
 use((_req, res, next) => (params) => {
   if (params?.action === 'brightness') {
-    const access = createWriteStream('/sys/class/backlight/backlight@0/brightness');
-    access.write(params?.value || 1);
-    access.close();
-    return res.end();
+    if (params?.method === 'post') {
+      const access = createWriteStream('/sys/class/backlight/backlight@0/brightness');
+      access.write(params?.value || 1);
+      access.close();
+      return res.end();
+    } else if (params?.method === 'get') {
+      const level = readFileSync('/sys/class/backlight/backlight@0/actual_brightness').toString().trim();
+      res.setHeader('Content-Type', 'application/json');
+      return res.end(JSON.stringify({ level: parseFloat(level) }));
+    }
   }
   next(params);
 });
 
 use((_req, res, next) => (params) => {
-  if (params?.action === 'shutdown') {
+  if (params?.method === 'post' && params?.action === 'shutdown') {
     exec('shutdown now');
     return res.end();
   }
@@ -107,7 +111,7 @@ use((_req, res, next) => (params) => {
 });
 
 use((_req, res, next) => (params) => {
-  if (params?.action === 'reboot') {
+  if (params?.method === 'post' && params?.action === 'reboot') {
     exec('reboot');
     return res.end();
   }
@@ -115,22 +119,12 @@ use((_req, res, next) => (params) => {
 });
 
 use((_req, res, next) => (params) => {
-  if (params?.method === 'get' && params?.action === 'getBrightness') {
-    const level = readFileSync('/sys/class/backlight/backlight@0/actual_brightness').toString().trim();
-    res.setHeader('Content-Type', 'application/json');
-    return res.end(JSON.stringify({ level: parseFloat(level) }));
-  }
-  next(params);
-});
-
-use((_req, res, next) => (params) => {
-  const targets = params?.files?.target || [];
-  if (params?.action === 'print' && targets[0] !== undefined && params?.fields?.size[0] !== undefined) {
-    const target = `${targets[0].path}.png`;
-    renameSync(targets[0].path, target);
-    exec(
-      `lp -d devterm_printer -o media=Custom.${params.fields.size[0]}mm -o scaling=100 -o print-quality=5 ${target}`,
-    );
+  const target = (params?.files?.target || [])[0];
+  const size = (params?.fields?.size || [])[0];
+  if (params?.method === 'post' && params?.action === 'print' && target !== undefined && size !== undefined) {
+    const targetName = '/tmp/hello-dt-print-target.png';
+    renameSync(target.path, targetName);
+    exec(`lp -d devterm_printer -o media=Custom.${size}mm -o scaling=100 -o print-quality=5 ${targetName}`);
     return res.end();
   }
   next(params);

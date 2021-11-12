@@ -2,7 +2,7 @@
 import { exec } from 'child_process';
 import qrcode from 'qrcode-terminal';
 import { program } from 'commander';
-import { writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { nanoid } from 'nanoid';
 import packageInfo from '../package.json';
@@ -41,9 +41,21 @@ program.parse();
 
 const options = program.opts();
 
+const servicePath = '/etc/systemd/system/hello-dt.service';
+
 if (options.install) {
   try {
-    writeFileSync('/etc/systemd/system/hello-dt.service', serviceTemplate);
+    if (existsSync(servicePath)) {
+      const lines = readFileSync(servicePath).toString().split('\n');
+      lines.some((line) => {
+        if (line.startsWith('ExecStart')) {
+          serviceTemplate.replace(secret, line.trim().split(' ').pop()!);
+          return true;
+        }
+        return false;
+      });
+    }
+    writeFileSync(servicePath, serviceTemplate);
     exec('systemctl daemon-reload');
     exec('systemctl status hello-dt.service', (err) => {
       if (!err) {
@@ -59,7 +71,7 @@ if (options.install) {
   }
 } else if (options.uninstall) {
   exec('systemctl stop hello-dt.service');
-  exec('rm /etc/systemd/system/hello-dt.service', (err, _stdout, stderr) => {
+  exec(`rm ${servicePath}`, (err, _stdout, stderr) => {
     if (err) {
       console.error(err);
       console.log(stderr);
