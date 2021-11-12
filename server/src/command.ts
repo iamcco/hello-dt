@@ -7,10 +7,10 @@ import { join, dirname } from 'path';
 import { nanoid } from 'nanoid';
 import packageInfo from '../package.json';
 
-const secret = nanoid();
+let secret = nanoid();
 
 const scriptPath = process.argv[1];
-const serviceTemplate = `[Unit]
+let serviceTemplate = `[Unit]
 Description=hello-dt service
 After=multi-user.target
 
@@ -49,7 +49,9 @@ if (options.install) {
       const lines = readFileSync(servicePath).toString().split('\n');
       lines.some((line) => {
         if (line.startsWith('ExecStart')) {
-          serviceTemplate.replace(secret, line.trim().split(' ').pop()!);
+          const preSecret = line.trim().split(' ').pop()!;
+          serviceTemplate = serviceTemplate.replace(secret, preSecret);
+          secret = preSecret;
           return true;
         }
         return false;
